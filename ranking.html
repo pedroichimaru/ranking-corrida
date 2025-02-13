@@ -4,24 +4,125 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Ranking via XLSX</title>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" as="style">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+     <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-items: center;
+            align-items: center;
+            margin: 0;
+        }
+        
+        #bodycontainer {
+            background-color: #e5e7ea;
+            width: 800px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            padding-left: 30px;
+            padding-right: 30px;
+            padding-bottom: 30px;
+            border-radius: 10px;
+            font-family: Roboto Slab;
+            font-size: smaller;
+        }
+        
+        #botoes {
+            font-family: Roboto Slab;
+            background-color: #676767;
+            border-radius: 5px;
+            border-width: 0px;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            color: white;
+        }
+        
+        #botoes:hover {
+            cursor: pointer;
+            background-color: #545252;
+        }
+        
+        select {
+            font-family: Roboto Slab;
+        }
+        
+        input {
+            font-family: Roboto Slab;
+        }
+         
+        #botaoUpload {
+            background-color: #676767;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-bottom: 5px;
+            padding-top: 5px;
+            border-radius: 5px;
+            color: white;
+        }
+         
+        #botaoUpload:hover {
+            cursor: pointer;
+            background-color: #545252;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+         th {
+             text-align: left;
+             height: 20px;
+         }
+         
+        td {
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+            height: 20px;
+        }
+
+        
+    </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
         let jsonData = [];
 
         async function carregarTabelaColocacao() {
-            const response = await fetch("tabela2.json");
-            return await response.json();
+            try {
+                const response = await fetch("tabela2.json");
+                return await response.json();
+            } catch (error) {
+                console.error("Erro ao carregar tabela de colocação:", error);
+                alert("Erro ao carregar tabela de colocação.");
+                return [];
+            }
         }
 
         async function carregarTabelaTempo(genero) {
-            const arquivo = genero === "Masculino" ? "tabela1a.json" : "tabela1b.json";
-            const response = await fetch(arquivo);
-            return await response.json();
+            try {
+                const arquivo = genero === "Masculino" ? "tabela1a.json" : "tabela1b.json";
+                const response = await fetch(arquivo);
+                return await response.json();
+            } catch (error) {
+                console.error("Erro ao carregar tabela de tempo:", error);
+                alert("Erro ao carregar tabela de tempo.");
+                return [];
+            }
         }
 
         function converterTempoParaSegundos(tempo) {
-            const [hh, mm, ss] = tempo.split(":").map(Number);
-            return hh * 3600 + mm * 60 + ss;
+            if (!tempo) return 0;
+            tempo = String(tempo).trim(); // Garantir que é uma string
+            if (!tempo.includes(":")) return 0; // Verificar se é um formato válido
+            
+            const partes = tempo.split(":").map(num => parseInt(num, 10) || 0);
+            if (partes.length === 2) partes.unshift(0); // Se for MM:SS, assume HH como 0
+            if (partes.length !== 3) return 0; // Formato inválido
+            
+            return partes[0] * 3600 + partes[1] * 60 + partes[2];
         }
 
         function processarArquivo(event) {
@@ -34,6 +135,13 @@
                 const workbook = XLSX.read(data, { type: "array" });
                 const sheet = workbook.Sheets[workbook.SheetNames[0]];
                 jsonData = XLSX.utils.sheet_to_json(sheet);
+                
+                console.log("Dados carregados do arquivo:", jsonData);
+                if (jsonData.length > 0) {
+                    alert("Arquivo carregado com sucesso! Clique em 'Gerar Ranking' para calcular.");
+                } else {
+                    alert("O arquivo parece estar vazio ou com um formato incorreto.");
+                }
             };
             reader.readAsArrayBuffer(file);
         }
@@ -44,11 +152,14 @@
                 return;
             }
 
+            console.log("Iniciando cálculo do ranking...");
             const tabelaColocacao = await carregarTabelaColocacao();
             let atletas = {};
 
             for (const row of jsonData) {
+                console.log("Processando linha:", row);
                 const nome = row["Nome"];
+                const idade = row["Idade"];
                 const genero = row["Gênero"];
                 const distancia = row["Distância"] === "Meia Maratona" ? "HM" : row["Distância"] === "Maratona" ? "M" : row["Distância"];
                 const tempo = row["Tempo Líquido"];
@@ -75,7 +186,7 @@
 
                 const notaProva = notaTempo + notaColocacao;
                 if (!atletas[nome]) {
-                    atletas[nome] = { somaNotas: 0, quantidadeProvas: 0 };
+                    atletas[nome] = { idade, genero, somaNotas: 0, quantidadeProvas: 0 };
                 }
                 atletas[nome].somaNotas += notaProva;
                 atletas[nome].quantidadeProvas++;
@@ -87,19 +198,20 @@
                 const pontuacaoProvas = Math.floor(atleta.somaNotas / atleta.quantidadeProvas);
                 const pontuacaoFrequencia = 1 + (0.05 * atleta.quantidadeProvas);
                 const pontuacaoRanking = Math.floor(pontuacaoProvas * pontuacaoFrequencia);
-                ranking.push({ Nome: nome, Pontuacao: pontuacaoRanking });
+                ranking.push({ Nome: nome, Idade: atleta.idade, Genero: atleta.genero, Pontuacao: pontuacaoRanking });
             }
 
             ranking.sort((a, b) => b.Pontuacao - a.Pontuacao);
+            console.log("Ranking final:", ranking);
             exibirRanking(ranking);
         }
 
         function exibirRanking(ranking) {
             const resultadoDiv = document.getElementById("resultadoFinal");
             resultadoDiv.innerHTML = "<h2>Ranking</h2>";
-            let html = "<table border='1'><tr><th>Posição</th><th>Nome</th><th>Pontuação</th></tr>";
+            let html = "<table><tr><th>Posição</th><th>Nome</th><th>Idade</th><th>Gênero</th><th>Pontuação</th></tr>";
             ranking.forEach((atleta, index) => {
-                html += `<tr><td>${index + 1}</td><td>${atleta.Nome}</td><td>${atleta.Pontuacao}</td></tr>`;
+                html += `<tr><td>${index + 1}</td><td>${atleta.Nome}</td><td>${atleta.Idade}</td><td>${atleta.Genero}</td><td>${atleta.Pontuacao}</td></tr>`;
             });
             html += "</table>";
             resultadoDiv.innerHTML += html;
@@ -107,11 +219,13 @@
     </script>
 </head>
 <body>
+    <div id="bodycontainer">
     <h1>Calculadora de Ranking via Upload XLSX</h1>
-    <input type="file" id="upload" accept=".xlsx" onchange="processarArquivo(event)">
+    <input type="file" id="upload" accept=".xlsx" onchange="processarArquivo(event)" style="display:none;"/>
+    <label id="botaoUpload" for="upload">Select file</label>
     <br><br>
-    <button onclick="calcularRanking()">Gerar Ranking</button>
-    <br><br>
+    <button id="botoes" onclick="calcularRanking()">Gerar Ranking</button>
     <div id="resultadoFinal"></div>
+    </div>
 </body>
 </html>
