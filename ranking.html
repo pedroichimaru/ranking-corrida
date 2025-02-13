@@ -6,7 +6,8 @@
     <title>Calculadora de Ranking via XLSX</title>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" as="style">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
-     <style>
+    
+    <style>
         body {
             display: flex;
             flex-direction: column;
@@ -84,45 +85,44 @@
             height: 20px;
         }
 
-        
     </style>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
     <script>
         let jsonData = [];
 
         async function carregarTabelaColocacao() {
-            try {
-                const response = await fetch("tabela2.json");
-                return await response.json();
-            } catch (error) {
-                console.error("Erro ao carregar tabela de colocação:", error);
-                alert("Erro ao carregar tabela de colocação.");
-                return [];
-            }
+            const response = await fetch("tabela2.json");
+            return response.json();
         }
 
         async function carregarTabelaTempo(genero) {
-            try {
-                const arquivo = genero === "Masculino" ? "tabela1a.json" : "tabela1b.json";
-                const response = await fetch(arquivo);
-                return await response.json();
-            } catch (error) {
-                console.error("Erro ao carregar tabela de tempo:", error);
-                alert("Erro ao carregar tabela de tempo.");
-                return [];
-            }
+            const arquivo = genero === "Masculino" ? "tabela1a.json" : "tabela1b.json";
+            const response = await fetch(arquivo);
+            return response.json();
         }
 
         function converterTempoParaSegundos(tempo) {
-            if (!tempo) return 0;
-            tempo = String(tempo).trim(); // Garantir que é uma string
-            if (!tempo.includes(":")) return 0; // Verificar se é um formato válido
+            if (!tempo || typeof tempo !== "string") return 0;
+            tempo = tempo.trim();
+            const regex = /^\d{1,2}:\d{2}:\d{2}$/;
+            if (!regex.test(tempo)) return 0;
             
             const partes = tempo.split(":").map(num => parseInt(num, 10) || 0);
-            if (partes.length === 2) partes.unshift(0); // Se for MM:SS, assume HH como 0
-            if (partes.length !== 3) return 0; // Formato inválido
-            
             return partes[0] * 3600 + partes[1] * 60 + partes[2];
+        }
+
+        function buscarNotaTempo(tempoSegundos, distancia, tabelaTempo) {
+            for (const linha of tabelaTempo) {
+                if (linha[distancia]) {
+                    const tempoTabelaSegundos = converterTempoParaSegundos(linha[distancia]);
+                    if (tempoSegundos <= tempoTabelaSegundos) {
+                        return linha["Pontos"];
+                    }
+                }
+            }
+            return 0;
         }
 
         function processarArquivo(event) {
@@ -134,9 +134,8 @@
                 const data = new Uint8Array(e.target.result);
                 const workbook = XLSX.read(data, { type: "array" });
                 const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                jsonData = XLSX.utils.sheet_to_json(sheet);
+                jsonData = XLSX.utils.sheet_to_json(sheet, { raw: false });
                 
-                console.log("Dados carregados do arquivo:", jsonData);
                 if (jsonData.length > 0) {
                     alert("Arquivo carregado com sucesso! Clique em 'Gerar Ranking' para calcular.");
                 } else {
@@ -152,39 +151,26 @@
                 return;
             }
 
-            console.log("Iniciando cálculo do ranking...");
             const tabelaColocacao = await carregarTabelaColocacao();
             let atletas = {};
 
             for (const row of jsonData) {
-                console.log("Processando linha:", row);
                 const nome = row["Nome"];
                 const idade = row["Idade"];
                 const genero = row["Gênero"];
                 const distancia = row["Distância"] === "Meia Maratona" ? "HM" : row["Distância"] === "Maratona" ? "M" : row["Distância"];
-                const tempo = row["Tempo Líquido"];
+                const tempo = String(row["Tempo Líquido"]).trim();
                 const colocacao = parseInt(row["Classificação"]);
                 const tabelaTempo = await carregarTabelaTempo(genero);
 
-                let notaColocacao = 0;
-                const linhaColocacao = tabelaColocacao.find(row => row["Colocação"] === colocacao);
-                if (linhaColocacao && linhaColocacao[distancia] !== undefined) {
-                    notaColocacao = linhaColocacao[distancia];
-                }
+                const linhaColocacao = tabelaColocacao.find(item => item["Colocação"] === colocacao);
+                const notaColocacao = linhaColocacao && linhaColocacao[distancia] ? linhaColocacao[distancia] : 0;
 
-                let notaTempo = 0;
                 const tempoSegundos = converterTempoParaSegundos(tempo);
-                for (const row of tabelaTempo) {
-                    if (row[distancia]) {
-                        const tempoTabelaSegundos = converterTempoParaSegundos(row[distancia]);
-                        if (tempoSegundos <= tempoTabelaSegundos) {
-                            notaTempo = row["Pontos"];
-                            break;
-                        }
-                    }
-                }
-
+                const notaTempo = buscarNotaTempo(tempoSegundos, distancia, tabelaTempo);
+                
                 const notaProva = notaTempo + notaColocacao;
+                
                 if (!atletas[nome]) {
                     atletas[nome] = { idade, genero, somaNotas: 0, quantidadeProvas: 0 };
                 }
@@ -202,7 +188,6 @@
             }
 
             ranking.sort((a, b) => b.Pontuacao - a.Pontuacao);
-            console.log("Ranking final:", ranking);
             exibirRanking(ranking);
         }
 
@@ -216,6 +201,7 @@
             html += "</table>";
             resultadoDiv.innerHTML += html;
         }
+
     </script>
 </head>
 <body>
