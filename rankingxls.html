@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranking via XLS</title>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" as="style">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-items: center;
+            align-items: center;
+            margin: 0;
+        }
+        
+        #bodycontainer {
+            background-color: #e5e7ea;
+            width: 800px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            padding-left: 30px;
+            padding-right: 30px;
+            padding-bottom: 30px;
+            border-radius: 10px;
+            font-family: Roboto Slab;
+            font-size: smaller;
+        }
+        
+        #botoes, #botaoUpload {
+            font-family: Roboto Slab;
+            background-color: #676767;
+            border-radius: 5px;
+            border-width: 0px;
+            padding: 5px 10px;
+            color: white;
+        }
+        
+        #botoes:hover, #botaoUpload:hover {
+            cursor: pointer;
+            background-color: #545252;
+        }
+        
+        select, input {
+            font-family: Roboto Slab;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+         th {
+             text-align: left;
+             height: 20px;
+         }
+         
+        td {
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+            height: 20px;
+        }
+        
+        #file-name {
+            font-family: Roboto Slab;
+            margin-left: 10px;
+        }
+    </style>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <script>
+        let jsonData = [];
+        
+        function processarArquivo(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            document.getElementById("file-name").textContent = file.name;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: "array" });
+                const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                jsonData = XLSX.utils.sheet_to_json(sheet, { raw: false });
+                
+                if (jsonData.length > 0) {
+                    alert("Arquivo carregado com sucesso! Clique em 'Gerar Ranking' para calcular.");
+                } else {
+                    alert("O arquivo parece estar vazio ou com um formato incorreto.");
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        async function carregarTabelaColocacao() {
+            const response = await fetch("tabela2.json");
+            return response.json();
+        }
+
+        async function carregarTabelaTempo(genero) {
+            const arquivo = genero === "Masculino" ? "tabela1a.json" : "tabela1b.json";
+            const response = await fetch(arquivo);
+            return response.json();
+        }
+
+        function converterTempoParaSegundos(tempo) {
+            if (!tempo || typeof tempo !== "string") return 0;
+            tempo = tempo.trim();
+            const regex = /^\d{1,2}:\d{2}:\d{2}$/;
+            if (!regex.test(tempo)) return 0;
+            
+            const partes = tempo.split(":").map(num => parseInt(num, 10) || 0);
+            return partes[0] * 3600 + partes[1] * 60 + partes[2];
+        }
+
+        function buscarNotaTempo(tempoSegundos, distancia, tabelaTempo) {
+            for (const linha of tabelaTempo) {
+                if (linha[distancia]) {
+                    const tempoTabelaSegundos = converterTempoParaSegundos(linha[distancia]);
+                    if (tempoSegundos <= tempoTabelaSegundos) {
+                        return linha["Pontos"];
+                    }
+                }
+            }
+            return 0;
+        }
+
+        async function calcularRanking() {
+            if (jsonData.length === 0) {
+                alert("Por favor, faça o upload de um arquivo XLSX antes de gerar o ranking.");
+                return;
+            }
+
+            const tabelaColocacao = await carregarTabelaColocacao();
+            let atletas = {};
+
+            for (const row of jsonData) {
+                const nome = row["Nome"];
+                const idade = row["Idade"];
+                const genero = row["Gênero"];
+                const distancia = row["Distância"] === "Meia Maratona" ? "HM" : row["Distância"] === "Maratona" ? "M" : row["Distância"];
+                const tempo = String(row["Tempo Líquido"]).trim();
+                const colocacao = parseInt(row["Classificação"]);
+                const tabelaTempo = await carregarTabelaTempo(genero);
+
+                const linhaColocacao = tabelaColocacao.find(item => item["Colocação"] === colocacao);
+                const notaColocacao = linhaColocacao && linhaColocacao[distancia] ? linhaColocacao[distancia] : 0;
+
+                const tempoSegundos = converterTempoParaSegundos(tempo);
+                const notaTempo = buscarNotaTempo(tempoSegundos, distancia, tabelaTempo);
+                
+                const notaProva = notaTempo + notaColocacao;
+                
+                if (!atletas[nome]) {
+                    atletas[nome] = { idade, genero, somaNotas: 0, quantidadeProvas: 0 };
+                }
+                atletas[nome].somaNotas += notaProva;
+                atletas[nome].quantidadeProvas++;
+            }
+
+            let ranking = [];
+            for (const nome in atletas) {
+                const atleta = atletas[nome];
+                const pontuacaoProvas = Math.floor(atleta.somaNotas / atleta.quantidadeProvas);
+                const pontuacaoFrequencia = 1 + (0.05 * atleta.quantidadeProvas);
+                const pontuacaoRanking = Math.floor(pontuacaoProvas * pontuacaoFrequencia);
+                ranking.push({ Nome: nome, Idade: atleta.idade, Genero: atleta.genero, Pontuacao: pontuacaoRanking });
+            }
+
+            ranking.sort((a, b) => b.Pontuacao - a.Pontuacao);
+            exibirRanking(ranking);
+        }
+
+        function exibirRanking(ranking) {
+            const resultadoDiv = document.getElementById("resultadoFinal");
+            resultadoDiv.innerHTML = "<h2>Ranking</h2>";
+            let html = "<table><tr><th>Posição</th><th>Nome</th><th>Idade</th><th>Gênero</th><th>Pontuação</th></tr>";
+            ranking.forEach((atleta, index) => {
+                html += `<tr><td>${index + 1}</td><td>${atleta.Nome}</td><td>${atleta.Idade}</td><td>${atleta.Genero}</td><td>${atleta.Pontuacao}</td></tr>`;
+            });
+            html += "</table>";
+            resultadoDiv.innerHTML += html;
+        }
+
+    </script>
+</head>
+<body>
+    <div id="bodycontainer">
+        <h1>Ranking via XLS</h1>
+        <input type="file" id="upload" accept=".xlsx" onchange="processarArquivo(event)" style="display:none;"/>
+        <label id="botaoUpload" for="upload">Select file</label>
+        <span id="file-name"></span>
+        <br><br>
+        <button id="botoes" onclick="calcularRanking()">Gerar Ranking</button>
+        <div id="resultadoFinal"></div>
+    </div>
+</body>
+</html>
