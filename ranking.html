@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Ranking via XLSX</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        let jsonData = [];
+
+        async function carregarTabelaColocacao() {
+            const response = await fetch("tabela2.json");
+            return await response.json();
+        }
+
+        async function carregarTabelaTempo(genero) {
+            const arquivo = genero === "Masculino" ? "tabela1a.json" : "tabela1b.json";
+            const response = await fetch(arquivo);
+            return await response.json();
+        }
+
+        function converterTempoParaSegundos(tempo) {
+            const [hh, mm, ss] = tempo.split(":").map(Number);
+            return hh * 3600 + mm * 60 + ss;
+        }
+
+        function processarArquivo(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: "array" });
+                const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                jsonData = XLSX.utils.sheet_to_json(sheet);
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        async function calcularRanking() {
+            if (jsonData.length === 0) {
+                alert("Por favor, faça o upload de um arquivo XLSX antes de gerar o ranking.");
+                return;
+            }
+
+            const tabelaColocacao = await carregarTabelaColocacao();
+            let atletas = {};
+
+            for (const row of jsonData) {
+                const nome = row["Nome"];
+                const genero = row["Gênero"];
+                const distancia = row["Distância"] === "Meia Maratona" ? "HM" : row["Distância"] === "Maratona" ? "M" : row["Distância"];
+                const tempo = row["Tempo Líquido"];
+                const colocacao = parseInt(row["Classificação"]);
+                const tabelaTempo = await carregarTabelaTempo(genero);
+
+                let notaColocacao = 0;
+                const linhaColocacao = tabelaColocacao.find(row => row["Colocação"] === colocacao);
+                if (linhaColocacao && linhaColocacao[distancia] !== undefined) {
+                    notaColocacao = linhaColocacao[distancia];
+                }
+
+                let notaTempo = 0;
+                const tempoSegundos = converterTempoParaSegundos(tempo);
+                for (const row of tabelaTempo) {
+                    if (row[distancia]) {
+                        const tempoTabelaSegundos = converterTempoParaSegundos(row[distancia]);
+                        if (tempoSegundos <= tempoTabelaSegundos) {
+                            notaTempo = row["Pontos"];
+                            break;
+                        }
+                    }
+                }
+
+                const notaProva = notaTempo + notaColocacao;
+                if (!atletas[nome]) {
+                    atletas[nome] = { somaNotas: 0, quantidadeProvas: 0 };
+                }
+                atletas[nome].somaNotas += notaProva;
+                atletas[nome].quantidadeProvas++;
+            }
+
+            let ranking = [];
+            for (const nome in atletas) {
+                const atleta = atletas[nome];
+                const pontuacaoProvas = Math.floor(atleta.somaNotas / atleta.quantidadeProvas);
+                const pontuacaoFrequencia = 1 + (0.05 * atleta.quantidadeProvas);
+                const pontuacaoRanking = Math.floor(pontuacaoProvas * pontuacaoFrequencia);
+                ranking.push({ Nome: nome, Pontuacao: pontuacaoRanking });
+            }
+
+            ranking.sort((a, b) => b.Pontuacao - a.Pontuacao);
+            exibirRanking(ranking);
+        }
+
+        function exibirRanking(ranking) {
+            const resultadoDiv = document.getElementById("resultadoFinal");
+            resultadoDiv.innerHTML = "<h2>Ranking</h2>";
+            let html = "<table border='1'><tr><th>Posição</th><th>Nome</th><th>Pontuação</th></tr>";
+            ranking.forEach((atleta, index) => {
+                html += `<tr><td>${index + 1}</td><td>${atleta.Nome}</td><td>${atleta.Pontuacao}</td></tr>`;
+            });
+            html += "</table>";
+            resultadoDiv.innerHTML += html;
+        }
+    </script>
+</head>
+<body>
+    <h1>Calculadora de Ranking via Upload XLSX</h1>
+    <input type="file" id="upload" accept=".xlsx" onchange="processarArquivo(event)">
+    <br><br>
+    <button onclick="calcularRanking()">Gerar Ranking</button>
+    <br><br>
+    <div id="resultadoFinal"></div>
+</body>
+</html>
