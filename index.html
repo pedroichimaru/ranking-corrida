@@ -6,60 +6,83 @@
     <title>Ranking de Corrida</title>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" as="style">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-items: center;
-            align-items: center;
-            margin: 0;
-        }
-        
+<style>
+    /* Global box-sizing to include padding in element width */
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
+    }
+    
+    #bodycontainer {
+        background-color: #e5e7ea;
+        width: 80%;
+        max-width: 800px;
+        margin: 30px 0;
+        padding: 30px;
+        padding-top: 0;
+        border-radius: 10px;
+        font-family: 'Roboto Slab', serif;
+        font-size: smaller;
+    }
+    
+    #botoesContainer {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    a {
+        font-family: 'Roboto Slab', serif;
+        font-size: large;
+        background-color: #676767;
+        width: 32%;
+        height: 100px;
+        border-radius: 5px;
+        border: none;
+        padding: 5px 10px;
+        color: white;
+        text-decoration: none;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    a:hover {
+        cursor: pointer;
+        background-color: #545252;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 600px) {
         #bodycontainer {
-            background-color: #e5e7ea;
-            width: 80%;
-            max-width: 550px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-            padding-left: 20px;
-            padding-right: 20px;
-            padding-bottom: 20px;
-            border-radius: 10px;
-            font-family: Roboto Slab;
-            font-size: smaller;
+            width: 90%;
+            margin: 20px auto;
+            padding: 20px;
         }
         
+        /* Ensure buttons remain fully inside the container’s padded area */
         #botoesContainer {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            gap: 15px;
+            align-items: stretch;
         }
         
         a {
-            font-family: Roboto Slab;
-            font-size: 14px;
-            background-color: #676767;
-            width: 30%;
-            max-width: 150px;
-            height: 100px;
-            border-radius: 5px;
-            border-width: 0px;
-            padding-left: 10px;
-            padding-right: 10px;
-            padding-top: 5px;
-            padding-bottom: 5px;
-            color: white;
-            text-decoration: none;
-            text-align-last: center;
-            align-content: center;
+            width: 100%; /* Fills the container's content area without overflowing its padding */
+            height: auto;
+            padding: 15px;
         }
-        
-        a:hover {
-            cursor: pointer;
-            background-color: #545252;
-        }
-    
-    </style>
+    }
+</style>
+
+
 </head>
 <body>
     <div id="bodycontainer">
