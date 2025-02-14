@@ -64,7 +64,7 @@
             resultadoDiv.innerHTML = "";
             
             try {
-                const response = await fetch('resultados_light.json');
+                const response = await fetch('resultados_light50.json');
                 const jsonData = await response.json();
                 await calcularRanking(jsonData);
             } catch (error) {
