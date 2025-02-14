@@ -25,12 +25,12 @@
             padding-right: 30px;
             padding-bottom: 30px;
             border-radius: 10px;
-            font-family: Roboto Slab;
+            font-family: 'Roboto Slab', serif;
             font-size: smaller;
         }
         
         #botoes, #botaoUpload {
-            font-family: Roboto Slab;
+            font-family: 'Roboto Slab', serif;
             background-color: #676767;
             border-radius: 5px;
             border-width: 0px;
@@ -44,7 +44,7 @@
         }
         
         select, input {
-            font-family: Roboto Slab;
+            font-family: 'Roboto Slab', serif;
         }
         
         table {
@@ -52,10 +52,10 @@
             width: 100%;
         }
         
-         th {
-             text-align: left;
-             height: 20px;
-         }
+        th {
+            text-align: left;
+            height: 20px;
+        }
          
         td {
             border-top: 1px solid black;
@@ -64,8 +64,17 @@
         }
         
         #file-name {
-            font-family: Roboto Slab;
+            font-family: 'Roboto Slab', serif;
             margin-left: 10px;
+        }
+        
+        #loading {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            display: none;
+            color: #626a71;
         }
     </style>
     
@@ -78,7 +87,7 @@
             const file = event.target.files[0];
             if (!file) return;
             
-            document.getElementById("file-name").textContent = file.name;
+            document.getElementById("file-name").textContent = "Arquivo: " + file.name;
             
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -88,7 +97,8 @@
                 jsonData = XLSX.utils.sheet_to_json(sheet, { raw: false });
                 
                 if (jsonData.length > 0) {
-                    alert("Arquivo carregado com sucesso! Clique em 'Gerar Ranking' para calcular.");
+                    alert("\nArquivo carregado com sucesso!");
+                    document.getElementById("botoes").style.display = "inline-block";
                 } else {
                     alert("O arquivo parece estar vazio ou com um formato incorreto.");
                 }
@@ -134,7 +144,10 @@
                 alert("Por favor, faça o upload de um arquivo XLSX antes de gerar o ranking.");
                 return;
             }
-
+            
+            // Exibe a mensagem "Carregando Dados..."
+            document.getElementById("loading").style.display = "block";
+            
             const tabelaColocacao = await carregarTabelaColocacao();
             let atletas = {};
 
@@ -173,6 +186,9 @@
 
             ranking.sort((a, b) => b.Pontuacao - a.Pontuacao);
             exibirRanking(ranking);
+            
+            // Oculta a mensagem "Carregando Dados..."
+            document.getElementById("loading").style.display = "none";
         }
 
         function exibirRanking(ranking) {
@@ -195,7 +211,9 @@
         <label id="botaoUpload" for="upload">Selecionar XLS</label>
         <span id="file-name"></span>
         <br><br>
-        <button id="botoes" onclick="calcularRanking()">Gerar Ranking</button>
+        <!-- O botão fica inicialmente oculto -->
+        <button id="botoes" style="display: none;" onclick="calcularRanking()">Gerar Ranking</button>
+        <div id="loading">Carregando Dados...</div>
         <div id="resultadoFinal"></div>
     </div>
 </body>

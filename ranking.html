@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ranking Automático</title>
+    <title>Ranking</title>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" as="style">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
     
@@ -23,35 +23,53 @@
             padding: 30px;
             padding-top: 0;
             border-radius: 10px;
+            font-size: smaller;
         }
         
         table {
             border-collapse: collapse;
             width: 100%;
-            font-size: smaller;
         }
         
-         th {
-             text-align: left;
-             height: 20px;
-         }
-         
+        th {
+            text-align: left;
+            height: 20px;
+        }
+        
         td {
             border-top: 1px solid black;
             border-bottom: 1px solid black;
             height: 20px;
         }
+        
+        #loading {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            display: none;
+            color: #626a71;
+        }
+        
     </style>
     
     <script>
         async function carregarDados() {
+            const loadingDiv = document.getElementById("loading");
+            const resultadoDiv = document.getElementById("resultadoFinal");
+            
+            loadingDiv.style.display = "block";
+            resultadoDiv.innerHTML = "";
+            
             try {
                 const response = await fetch('resultados_light.json');
                 const jsonData = await response.json();
-                calcularRanking(jsonData);
+                await calcularRanking(jsonData);
             } catch (error) {
                 console.error("Erro ao carregar o arquivo JSON:", error);
             }
+            
+            loadingDiv.style.display = "none";
         }
 
         async function carregarTabelaColocacao() {
@@ -126,13 +144,12 @@
 
         function exibirRanking(ranking) {
             const resultadoDiv = document.getElementById("resultadoFinal");
-            resultadoDiv.innerHTML = "<h2></h2>";
             let html = "<table><tr><th>Posição</th><th>Nome</th><th>Idade</th><th>Gênero</th><th>Pontuação</th></tr>";
             ranking.forEach((atleta, index) => {
                 html += `<tr><td>${index + 1}</td><td>${atleta.Nome}</td><td>${atleta.Idade}</td><td>${atleta.Genero}</td><td>${atleta.Pontuacao}</td></tr>`;
             });
             html += "</table>";
-            resultadoDiv.innerHTML += html;
+            resultadoDiv.innerHTML = html;
         }
         
         window.onload = carregarDados;
@@ -140,7 +157,8 @@
 </head>
 <body>
     <div id="bodycontainer">
-        <h1>Ranking</h1>
+        <h1>Ranking via Database</h1>
+        <div id="loading">Carregando Dados...</div>
         <div id="resultadoFinal"></div>
     </div>
 </body>
