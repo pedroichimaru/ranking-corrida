@@ -7,15 +7,15 @@
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" as="style">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
     
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-items: center;
-            align-items: center;
-            margin: 0;
-        }
-        
+<style>
+    body {
+        display: flex;
+        flex-direction: column;
+        justify-items: center;
+        align-items: center;
+        margin: 0;
+    }
+    
     #bodycontainer {
         background-color: #e5e7ea;
         width: 80%;
@@ -28,54 +28,57 @@
         font-size: smaller;
     }
         
-        #botoes, #botaoUpload {
-            font-family: 'Roboto Slab', serif;
-            background-color: #676767;
-            border-radius: 5px;
-            border-width: 0px;
-            padding: 5px 10px;
-            color: white;
-        }
-        
-        #botoes:hover, #botaoUpload:hover {
-            cursor: pointer;
-            background-color: #545252;
-        }
-        
-        select, input {
-            font-family: 'Roboto Slab', serif;
-        }
-        
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        
-        th {
-            text-align: left;
-            height: 20px;
-        }
+    /* Define a consistent font size for both botões */
+    #botoes, #botaoUpload {
+        font-family: 'Roboto Slab', serif;
+        font-size: 14px; /* Mesma fonte para ambos */
+        background-color: #676767;
+        border-radius: 5px;
+        border-width: 0;
+        padding: 5px 10px;
+        color: white;
+    }
+    
+    #botoes:hover, #botaoUpload:hover {
+        cursor: pointer;
+        background-color: #545252;
+    }
+    
+    select, input {
+        font-family: 'Roboto Slab', serif;
+    }
+    
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    
+    th {
+        text-align: left;
+        height: 20px;
+    }
          
-        td {
-            border-top: 1px solid black;
-            border-bottom: 1px solid black;
-            height: 20px;
-        }
-        
-        #file-name {
-            font-family: 'Roboto Slab', serif;
-            margin-left: 10px;
-        }
-        
-        #loading {
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            padding: 20px;
-            display: none;
-            color: #626a71;
-        }
-    </style>
+    td {
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+        height: 20px;
+    }
+    
+    #file-name {
+        font-family: 'Roboto Slab', serif;
+        margin-left: 10px;
+    }
+    
+    #loading {
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        padding: 20px;
+        display: none;
+        color: #626a71;
+    }
+</style>
+
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
