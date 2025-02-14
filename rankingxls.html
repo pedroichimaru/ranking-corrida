@@ -193,7 +193,7 @@
         function exibirRanking(ranking) {
             const resultadoDiv = document.getElementById("resultadoFinal");
             resultadoDiv.innerHTML = "<h2>Ranking</h2>";
-            let html = "<table><tr><th>Pos.</th><th>Nome</th><th>Idade</th><th>Gênero</th><th>Pontos</th></tr>";
+            let html = "<table><tr><th>Pos.</th><th>Nome</th><th>Idade</th><th>Gênero</th><th>Pts.</th></tr>";
             ranking.forEach((atleta, index) => {
                 html += `<tr><td>${index + 1}</td><td>${atleta.Nome}</td><td>${atleta.Idade}</td><td>${atleta.Genero}</td><td>${atleta.Pontuacao}</td></tr>`;
             });
