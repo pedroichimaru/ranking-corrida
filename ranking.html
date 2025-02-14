@@ -16,15 +16,17 @@
             font-family: Roboto Slab;
         }
         
-        #bodycontainer {
-            background-color: #e5e7ea;
-            width: 800px;
-            margin: 30px auto;
-            padding: 30px;
-            padding-top: 0;
-            border-radius: 10px;
-            font-size: smaller;
-        }
+    #bodycontainer {
+        background-color: #e5e7ea;
+        width: 80%;
+        max-width: 800px;
+        margin: 30px 0;
+        padding: 30px;
+        padding-top: 0;
+        border-radius: 10px;
+        font-family: 'Roboto Slab', serif;
+        font-size: smaller;
+    }
         
         table {
             border-collapse: collapse;
@@ -62,7 +64,7 @@
             resultadoDiv.innerHTML = "";
             
             try {
-                const response = await fetch('resultados_light.json');
+                const response = await fetch('resultados_light50.json');
                 const jsonData = await response.json();
                 await calcularRanking(jsonData);
             } catch (error) {

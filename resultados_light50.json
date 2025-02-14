@@ -1,0 +1,443 @@
+[
+    {
+        "Nome": "Renata Nakamura",
+        "Idade": 45,
+        "Gênero": "Feminino",
+        "Prova": "Seven Run",
+        "Distância": "7K",
+        "Tempo Líquido": "01:03:56",
+        "Classificação": 724
+    },
+    {
+        "Nome": "Adriana Almeida",
+        "Idade": 22,
+        "Gênero": "Feminino",
+        "Prova": "Athenas Run Longer",
+        "Distância": "HM",
+        "Tempo Líquido": "01:27:50",
+        "Classificação": 744
+    },
+    {
+        "Nome": "Patrícia Santos",
+        "Idade": 45,
+        "Gênero": "Feminino",
+        "Prova": "Venus",
+        "Distância": "10K",
+        "Tempo Líquido": "01:27:57",
+        "Classificação": 567
+    },
+    {
+        "Nome": "Carlos Rossi",
+        "Idade": 55,
+        "Gênero": "Masculino",
+        "Prova": "Venus",
+        "Distância": "5K",
+        "Tempo Líquido": "00:31:43",
+        "Classificação": 633
+    },
+    {
+        "Nome": "Alex Leblanc",
+        "Idade": 65,
+        "Gênero": "Masculino",
+        "Prova": "Seven Run",
+        "Distância": "28K",
+        "Tempo Líquido": "02:28:03",
+        "Classificação": 194
+    },
+    {
+        "Nome": "Eduardo Pereira",
+        "Idade": 71,
+        "Gênero": "Masculino",
+        "Prova": "Run the Bridge",
+        "Distância": "15K",
+        "Tempo Líquido": "01:14:04",
+        "Classificação": 276
+    },
+    {
+        "Nome": "Adriana García",
+        "Idade": 38,
+        "Gênero": "Feminino",
+        "Prova": "Run the Bridge",
+        "Distância": "5K",
+        "Tempo Líquido": "00:54:02",
+        "Classificação": 446
+    },
+    {
+        "Nome": "Leonardo Rossi",
+        "Idade": 53,
+        "Gênero": "Masculino",
+        "Prova": "Athenas Run Faster",
+        "Distância": "15K",
+        "Tempo Líquido": "02:44:21",
+        "Classificação": 781
+    },
+    {
+        "Nome": "Camila Silva",
+        "Idade": 45,
+        "Gênero": "Feminino",
+        "Prova": "Athenas Run Stronger",
+        "Distância": "25K",
+        "Tempo Líquido": "01:56:05",
+        "Classificação": 302
+    },
+    {
+        "Nome": "André Pereira",
+        "Idade": 39,
+        "Gênero": "Masculino",
+        "Prova": "Seven Run",
+        "Distância": "HM",
+        "Tempo Líquido": "01:54:52",
+        "Classificação": 553
+    },
+    {
+        "Nome": "Henrique Almeida",
+        "Idade": 38,
+        "Gênero": "Masculino",
+        "Prova": "Athenas Run Faster",
+        "Distância": "5K",
+        "Tempo Líquido": "00:49:30",
+        "Classificação": 456
+    },
+    {
+        "Nome": "Thiago Leblanc",
+        "Idade": 55,
+        "Gênero": "Masculino",
+        "Prova": "Athenas Run Longer",
+        "Distância": "7K",
+        "Tempo Líquido": "01:04:43",
+        "Classificação": 312
+    },
+    {
+        "Nome": "Pedro Müller",
+        "Idade": 23,
+        "Gênero": "Masculino",
+        "Prova": "Seven Run",
+        "Distância": "14K",
+        "Tempo Líquido": "01:27:43",
+        "Classificação": 707
+    },
+    {
+        "Nome": "Rafael Dubois",
+        "Idade": 39,
+        "Gênero": "Masculino",
+        "Prova": "Athenas Run Longer",
+        "Distância": "7K",
+        "Tempo Líquido": "00:28:39",
+        "Classificação": 782
+    },
+    {
+        "Nome": "Simone Ivanov",
+        "Idade": 71,
+        "Gênero": "Feminino",
+        "Prova": "Run the Bridge",
+        "Distância": "15K",
+        "Tempo Líquido": "01:22:29",
+        "Classificação": 513
+    },
+    {
+        "Nome": "Camila Yamamoto",
+        "Idade": 71,
+        "Gênero": "Feminino",
+        "Prova": "Seven Run",
+        "Distância": "28K",
+        "Tempo Líquido": "01:47:20",
+        "Classificação": 793
+    },
+    {
+        "Nome": "Pedro Almeida",
+        "Idade": 24,
+        "Gênero": "Masculino",
+        "Prova": "Athenas Run Longer",
+        "Distância": "HM",
+        "Tempo Líquido": "01:18:21",
+        "Classificação": 698
+    },
+    {
+        "Nome": "Fernando Kowalski",
+        "Idade": 23,
+        "Gênero": "Masculino",
+        "Prova": "Venus",
+        "Distância": "10K",
+        "Tempo Líquido": "01:14:53",
+        "Classificação": 670
+    },
+    {
+        "Nome": "Pedro Müller",
+        "Idade": 23,
+        "Gênero": "Masculino",
+        "Prova": "Venus",
+        "Distância": "10K",
+        "Tempo Líquido": "01:54:55",
+        "Classificação": 433
+    },
+    {
+        "Nome": "Natália Hernandez",
+        "Idade": 58,
+        "Gênero": "Feminino",
+        "Prova": "Run the Bridge",
+        "Distância": "30K",
+        "Tempo Líquido": "03:23:57",
+        "Classificação": 197
+    },
+    {
+        "Nome": "Gabriel Schmidt",
+        "Idade": 42,
+        "Gênero": "Masculino",
+        "Prova": "Athenas Run Faster",
+        "Distância": "5K",
+        "Tempo Líquido": "00:35:21",
+        "Classificação": 303
+    },
+    {
+        "Nome": "Henrique Leblanc",
+        "Idade": 28,
+        "Gênero": "Masculino",
+        "Prova": "Athenas Run Faster",
+        "Distância": "HM",
+        "Tempo Líquido": "02:59:20",
+        "Classificação": 119
+    },
+    {
+        "Nome": "Bianca Leblanc",
+        "Idade": 27,
+        "Gênero": "Feminino",
+        "Prova": "Athenas Run Longer",
+        "Distância": "7K",
+        "Tempo Líquido": "00:34:50",
+        "Classificação": 621
+    },
+    {
+        "Nome": "Camila García",
+        "Idade": 60,
+        "Gênero": "Feminino",
+        "Prova": "Venus",
+        "Distância": "5K",
+        "Tempo Líquido": "00:32:49",
+        "Classificação": 419
+    },
+    {
+        "Nome": "Juliana Ivanov",
+        "Idade": 63,
+        "Gênero": "Feminino",
+        "Prova": "Athenas Run Faster",
+        "Distância": "10K",
+        "Tempo Líquido": "00:44:48",
+        "Classificação": 649
+    },
+    {
+        "Nome": "Eduardo Kowalski",
+        "Idade": 72,
+        "Gênero": "Masculino",
+        "Prova": "Seven Run",
+        "Distância": "HM",
+        "Tempo Líquido": "01:48:19",
+        "Classificação": 341
+    },
+    {
+        "Nome": "Carla Nakamura",
+        "Idade": 26,
+        "Gênero": "Feminino",
+        "Prova": "Athenas Run Stronger",
+        "Distância": "12K",
+        "Tempo Líquido": "01:16:06",
+        "Classificação": 504
+    },
+    {
+        "Nome": "Fernanda Fernández",
+        "Idade": 63,
+        "Gênero": "Feminino",
+        "Prova": "Athenas Run Faster",
+        "Distância": "10K",
+        "Tempo Líquido": "00:41:07",
+        "Classificação": 548
+    },
+    {
+        "Nome": "Renata Leblanc",
+        "Idade": 72,
+        "Gênero": "Feminino",
+        "Prova": "Venus",
+        "Distância": "HM",
+        "Tempo Líquido": "02:20:32",
+        "Classificação": 297
+    },
+    {
+        "Nome": "Vitor Kowalski",
+        "Idade": 61,
+        "Gênero": "Masculino",
+        "Prova": "Venus",
+        "Distância": "10K",
+        "Tempo Líquido": "01:01:33",
+        "Classificação": 81
+    },
+    {
+        "Nome": "Lucas Moretti",
+        "Idade": 28,
+        "Gênero": "Masculino",
+        "Prova": "SP City",
+        "Distância": "M",
+        "Tempo Líquido": "02:46:13",
+        "Classificação": 579
+    },
+    {
+        "Nome": "Gustavo García",
+        "Idade": 53,
+        "Gênero": "Masculino",
+        "Prova": "Athenas Run Longer",
+        "Distância": "7K",
+        "Tempo Líquido": "01:14:11",
+        "Classificação": 607
+    },
+    {
+        "Nome": "Vitor Rossi",
+        "Idade": 28,
+        "Gênero": "Masculino",
+        "Prova": "Athenas Run Faster",
+        "Distância": "HM",
+        "Tempo Líquido": "02:43:05",
+        "Classificação": 658
+    },
+    {
+        "Nome": "Fernanda Santos",
+        "Idade": 26,
+        "Gênero": "Feminino",
+        "Prova": "Athenas Run Longer",
+        "Distância": "28K",
+        "Tempo Líquido": "03:36:18",
+        "Classificação": 600
+    },
+    {
+        "Nome": "Diego Santos",
+        "Idade": 56,
+        "Gênero": "Masculino",
+        "Prova": "SP City",
+        "Distância": "M",
+        "Tempo Líquido": "03:57:36",
+        "Classificação": 21
+    },
+    {
+        "Nome": "Simone Lopez",
+        "Idade": 36,
+        "Gênero": "Feminino",
+        "Prova": "Athenas Run Faster",
+        "Distância": "15K",
+        "Tempo Líquido": "01:23:54",
+        "Classificação": 410
+    },
+    {
+        "Nome": "Eduardo Smith",
+        "Idade": 67,
+        "Gênero": "Masculino",
+        "Prova": "Athenas Run Longer",
+        "Distância": "7K",
+        "Tempo Líquido": "00:26:54",
+        "Classificação": 580
+    },
+    {
+        "Nome": "Leonardo Schmidt",
+        "Idade": 35,
+        "Gênero": "Masculino",
+        "Prova": "Athenas Run Stronger",
+        "Distância": "18K",
+        "Tempo Líquido": "02:19:24",
+        "Classificação": 440
+    },
+    {
+        "Nome": "Simone Pereira",
+        "Idade": 51,
+        "Gênero": "Feminino",
+        "Prova": "Venus",
+        "Distância": "HM",
+        "Tempo Líquido": "01:23:13",
+        "Classificação": 146
+    },
+    {
+        "Nome": "Lucas García",
+        "Idade": 44,
+        "Gênero": "Masculino",
+        "Prova": "Athenas Run Longer",
+        "Distância": "28K",
+        "Tempo Líquido": "02:59:29",
+        "Classificação": 489
+    },
+    {
+        "Nome": "Thiago Almeida",
+        "Idade": 23,
+        "Gênero": "Masculino",
+        "Prova": "Athenas Run Longer",
+        "Distância": "28K",
+        "Tempo Líquido": "02:36:55",
+        "Classificação": 619
+    },
+    {
+        "Nome": "Fernanda Pereira",
+        "Idade": 36,
+        "Gênero": "Feminino",
+        "Prova": "SP City",
+        "Distância": "HM",
+        "Tempo Líquido": "02:25:08",
+        "Classificação": 673
+    },
+    {
+        "Nome": "Patrícia Nakamura",
+        "Idade": 54,
+        "Gênero": "Feminino",
+        "Prova": "Athenas Run Longer",
+        "Distância": "28K",
+        "Tempo Líquido": "03:41:57",
+        "Classificação": 293
+    },
+    {
+        "Nome": "Fernando Santos",
+        "Idade": 47,
+        "Gênero": "Masculino",
+        "Prova": "Seven Run",
+        "Distância": "28K",
+        "Tempo Líquido": "01:48:41",
+        "Classificação": 452
+    },
+    {
+        "Nome": "Marcos Rossi",
+        "Idade": 56,
+        "Gênero": "Masculino",
+        "Prova": "SP City",
+        "Distância": "M",
+        "Tempo Líquido": "03:12:30",
+        "Classificação": 196
+    },
+    {
+        "Nome": "Jéssica Smith",
+        "Idade": 32,
+        "Gênero": "Feminino",
+        "Prova": "Seven Run",
+        "Distância": "28K",
+        "Tempo Líquido": "03:57:57",
+        "Classificação": 273
+    },
+    {
+        "Nome": "Diego Hernandez",
+        "Idade": 50,
+        "Gênero": "Masculino",
+        "Prova": "Athenas Run Stronger",
+        "Distância": "12K",
+        "Tempo Líquido": "02:05:47",
+        "Classificação": 512
+    },
+    {
+        "Nome": "Sabrina Moretti",
+        "Idade": 65,
+        "Gênero": "Feminino",
+        "Prova": "Run the Bridge",
+        "Distância": "10K",
+        "Tempo Líquido": "01:22:50",
+        "Classificação": 190
+    },
+    {
+        "Nome": "Thiago Rossi",
+        "Idade": 64,
+        "Gênero": "Masculino",
+        "Prova": "Athenas Run Faster",
+        "Distância": "15K",
+        "Tempo Líquido": "01:58:50",
+        "Classificação": 362
+    }
+]
